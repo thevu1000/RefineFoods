@@ -1,0 +1,33 @@
+@mixin downMobile {
+  @media only screen and (max-width: 475px) {
+    @content;
+  }
+}
+
+@mixin downSm {
+  @media only screen and (max-width: 639px) {
+    @content;
+  }
+}
+
+@mixin downMd {
+  @media only screen and (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin downLg {
+  @media only screen and (max-width: 1024px) {
+    @content;
+  }
+}
+@mixin downXl {
+  @media only screen and (max-width: 1279px) {
+    @content;
+  }
+}
+@mixin down2xl {
+  @media only screen and (max-width: 1535px) {
+    @content;
+  }
+}
