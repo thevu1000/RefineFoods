@@ -45,7 +45,7 @@ const Header = () => {
               </DialogTitle>
             </DialogHeader>
 
-            <div className="p-4 text-black">
+            <div className="p-4 text-black h-[60vh] overflow-scroll">
               {cart.map((product) => (
                 <div className="flex items-center justify-between border-b p-1 pb-[15px]" key={product.id}>
                   <div className="flex items-center gap-2">
