@@ -32,10 +32,10 @@ const ProductList: React.FC = () => {
     const queryParams = new URLSearchParams(location.search);
     const initialPageSize = parseInt(queryParams.get('pageSize') || '6', 10);
     const [pageSize, setPageSize] = useState<number>(initialPageSize);
-
+    const page = parseInt(queryParams.get('page') || '1', 10);
     // Reset currentPage về 1 khi categoryId thay đổi
     useEffect(() => {
-        setCurrentPage(1); // Reset currentPage về 1
+        setCurrentPage(page); // Reset currentPage về 1
     }, [categoryId]);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const ProductList: React.FC = () => {
         newParams.set('pageSize', pageSize.toString());
         newParams.set('page', currentPage.toString()); // Có thể thêm page nếu bạn muốn theo dõi số trang
         navigate(`?${newParams.toString()}`, { replace: true });
-    }, [pageSize, currentPage, navigate, location.search]);
+    }, [pageSize, currentPage, categoryId]);
 
     if (isLoading) return (
         <Skeleton className='flex flex-col items-center gap-4 md:flex-row md:gap-8'>
