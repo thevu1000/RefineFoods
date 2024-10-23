@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'; // Import useEffect để theo dõi sự thay đổi
 import useStore from '@/stores/store'; // Đảm bảo import đúng đường dẫn đến store
 
+
 type Product = {
     id: number;
     name: string;
