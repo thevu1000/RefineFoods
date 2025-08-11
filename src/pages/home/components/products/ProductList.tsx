@@ -18,21 +18,29 @@ interface Product {
 }
 
 const ProductList: React.FC = () => {
-    const { categoryId } = useParams<{ categoryId: string }>(); 
+    const { categoryId: categoryIdParam } = useParams<{ categoryId: string }>(); 
     const location = useLocation(); 
     const navigate = useNavigate(); 
 
+    // Ép sang number và check invalid
+    const categoryId = categoryIdParam ? Number(categoryIdParam) : undefined;
+
     const queryParams = new URLSearchParams(location.search);
     const initialPageSize = parseInt(queryParams.get('pageSize') || '6', 10);
-    const [pageSize, setPageSize] = useState<number>(initialPageSize);
+    const [pageSize] = useState<number>(initialPageSize);
     const [currentPage, setCurrentPage] = useState<number>(parseInt(queryParams.get('page') || '1', 10));
 
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
 
-    var { allProducts, error, isLoading, totalCount } = useFetchProducts(currentPage, start, end, categoryId);
+    const { allProducts, error, isLoading, totalCount = 0 } = useFetchProducts(
+        currentPage,
+        start,
+        end,
+        categoryId ?? 0 // Tránh undefined
+    );
 
-    const totalPages = Math.ceil(totalCount / pageSize); 
+    const totalPages = Math.ceil(Number(totalCount) / Number(pageSize));
 
     // Cập nhật URL khi pageSize hoặc currentPage thay đổi
     useEffect(() => {
@@ -57,7 +65,7 @@ const ProductList: React.FC = () => {
     if (!allProducts?.length) return <p>No products found.</p>;
 
     const filteredProducts: Product[] = allProducts.filter((product: Product) => {
-        return product.category.id === parseInt(categoryId!, 10);
+        return product.category.id === (categoryId ?? 0);
     });
 
     if (!filteredProducts.length) return <p>No products found for this category.</p>;

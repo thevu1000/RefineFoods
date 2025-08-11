@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { ReactNode } from 'react';
 
 // Interface cho Category
 interface Category {
@@ -7,27 +8,32 @@ interface Category {
   isActive: boolean;
 }
 
-// Interface cho Product
-interface Product {
+// Sản phẩm gốc (không quantity)
+export interface BaseProduct {
+  name: ReactNode;
   images: any;
   id: number;
   title: string;
   price: number;
   categoryId: number;
-  quantity: number; // Thêm thuộc tính quantity để theo dõi số lượng
+}
+
+// Sản phẩm trong giỏ hàng (có quantity)
+export interface CartItem extends BaseProduct {
+  quantity: number;
 }
 
 // Interface Zustand Store
 interface StoreState {
   categories: Category[];
   activeCategoryId: number;
-  cart: Product[]; // Thêm thuộc tính cart
-  addToCart: (product: Product) => void; // Thêm hàm addToCart
-  removeFromCart: (productId: number) => void; // Thêm hàm removeFromCart
+  cart: CartItem[];
+  addToCart: (product: BaseProduct) => void;
+  removeFromCart: (productId: number) => void;
 }
 
 // Tạo Zustand store
-const useStore = create<StoreState>((set, get) => ({
+const useStore = create<StoreState>((set) => ({
   categories: [
     { id: 1, title: '🍟 Starters', isActive: true },
     { id: 2, title: '🍝 Pastas', isActive: false },
@@ -40,33 +46,30 @@ const useStore = create<StoreState>((set, get) => ({
     { id: 9, title: '🥤 Cold Drinks', isActive: false },
     { id: 10, title: '☕ Hot Drinks', isActive: false },
   ],
-  activeCategoryId: 1, // Mặc định category đầu tiên active
-  cart: [], // Khởi tạo giỏ hàng rỗng
+  activeCategoryId: 1,
+  cart: [],
 
-  // Hàm thêm sản phẩm vào giỏ hàng
-  addToCart: (product: Product) => {
+  // Thêm sản phẩm vào giỏ
+  addToCart: (product: BaseProduct) => {
     set((state) => {
       const existingProduct = state.cart.find(item => item.id === product.id);
       if (existingProduct) {
-        // Nếu sản phẩm đã tồn tại, tăng số lượng
         return {
           cart: state.cart.map(item =>
             item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
           ),
         };
       } else {
-        // Nếu sản phẩm chưa tồn tại, thêm mới với số lượng = 1
         return { cart: [...state.cart, { ...product, quantity: 1 }] };
       }
     });
   },
 
-  // Hàm xóa sản phẩm khỏi giỏ hàng
+  // Xóa sản phẩm khỏi giỏ
   removeFromCart: (productId: number) => {
     set((state) => {
       const existingProduct = state.cart.find(item => item.id === productId);
       if (existingProduct) {
-        // Nếu sản phẩm có số lượng lớn hơn 1, chỉ cần giảm số lượng
         if (existingProduct.quantity > 1) {
           return {
             cart: state.cart.map(item =>
@@ -74,11 +77,10 @@ const useStore = create<StoreState>((set, get) => ({
             ),
           };
         } else {
-          // Nếu số lượng = 1, xóa sản phẩm khỏi giỏ hàng
           return { cart: state.cart.filter(item => item.id !== productId) };
         }
       }
-      return state; // Nếu sản phẩm không tồn tại, không làm gì
+      return state;
     });
   },
 }));

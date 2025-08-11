@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext} from 'react'
 import { useMediaQuery } from 'react-responsive'
 
 interface ProviderContextProps {

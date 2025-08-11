@@ -2,7 +2,6 @@ import { Link } from "react-router-dom"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,

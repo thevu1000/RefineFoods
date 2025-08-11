@@ -2,7 +2,7 @@ import { useQuery , keepPreviousData} from '@tanstack/react-query';
 import { fetchProducts } from '@/api/fetchData';
 
 export const useFetchProducts = (currentPage: number, start: number, end: number, categoryId: number) => {
-    const { data: { data: allProducts, totalCount} = {}, error, isLoading, isPlaceholderData } = useQuery({
+    const { data: { data: allProducts, totalCount} = {}, error, isLoading } = useQuery({
         queryKey: ['products', categoryId, currentPage],
         queryFn: () => fetchProducts(start, end, categoryId),
         placeholderData: keepPreviousData,

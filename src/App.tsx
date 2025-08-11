@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LayoutHome from './pages/home/layoutHome'
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
